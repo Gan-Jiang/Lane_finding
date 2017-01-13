@@ -123,9 +123,9 @@ def r_threshold(img, thresh = (170, 255)):
 def thresholding(img):
     dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
     imshape = dst.shape
-    vertices = np.array([[(0, imshape[0]), (0.475*imshape[1], 400),
+    vertices = np.array([[(100, imshape[0]), (0.475*imshape[1], 400),
                                   (0.525*imshape[1], 400),
-                                  (imshape[1], imshape[0])]], dtype=np.int32)
+                                  (imshape[1]-100, imshape[0])]], dtype=np.int32)
     dst = region_of_interest(dst, vertices)
     s_binary = s_threshold(dst, thresh=(170, 255))
     grad_binary = abs_sobel_thresh(dst, orient='x', thresh_min=20, thresh_max=100)
