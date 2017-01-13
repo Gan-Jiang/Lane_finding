@@ -50,7 +50,7 @@ def lane_finding(warped):
         histogram_right = np.sum(warped[start:offset, peak_right - window_width_half:peak_right + window_width_half + 1], axis=0)
         if histogram_right.max() > 5:
             peak_right = np.argmax(histogram_right) + peak_right - window_width_half
-    return leftx,lefty,rightx,righty
+    return np.array(leftx),np.array(lefty),np.array(rightx),np.array(righty)
     '''
     result = np.zeros_like(warped)
     result[lefty,leftx] = 1
@@ -68,6 +68,45 @@ def lane_finding(warped):
     '''
 
 
-img = cv2.imread('test_images/test1.jpg')
+def get_curvature(left_fitx, right_fitx, yvals):
+    # Define conversions in x and y from pixels space to meters
+    ym_per_pix = 30 / 720  # meters per pixel in y dimension
+    xm_per_pix = 3.7 / 700  # meteres per pixel in x dimension
+    y_eval = 720
+    left_fit_cr = np.polyfit(yvals * ym_per_pix, left_fitx * xm_per_pix, 2)
+    right_fit_cr = np.polyfit(yvals * ym_per_pix, right_fitx * xm_per_pix, 2)
+    left_curverad = ((1 + (2 * left_fit_cr[0] * y_eval + left_fit_cr[1]) ** 2) ** 1.5) \
+                    / np.absolute(2 * left_fit_cr[0])
+    right_curverad = ((1 + (2 * right_fit_cr[0] * y_eval + right_fit_cr[1]) ** 2) ** 1.5) \
+                     / np.absolute(2 * right_fit_cr[0])
+    # Now our radius of curvature is in meters
+    return left_curverad, right_curverad
+
+def get_polyfit(leftx, lefty, rightx, righty, order = 2):
+    left_fit = np.polyfit(lefty, leftx, order)
+    yvals = np.linspace(0, 100, num=101) * 7.2
+    left_fitx = left_fit[0] * yvals ** 2 + left_fit[1] * yvals + left_fit[2]
+
+    right_fit = np.polyfit(righty, rightx, order)
+    right_fitx = right_fit[0] * yvals ** 2 + right_fit[1] * yvals + right_fit[2]
+    '''
+    plt.plot(leftx, lefty, 'o', color='red')
+    plt.plot(rightx, righty, 'o', color='blue')
+    plt.xlim(0, 1280)
+    plt.ylim(0, 720)
+    plt.plot(left_fitx, yvals, color='green', linewidth=3)
+    plt.plot(right_fitx, yvals, color='green', linewidth=3)
+    plt.gca().invert_yaxis()  # to visualize as we do the images
+    '''
+    return left_fitx, right_fitx, yvals
+
+def vehicle_position(left_fitx):
+    xm_per_pix = 3.7 / 700  # meteres per pixel in x dimension
+    return (1280//2 - left_fitx[-1]) * xm_per_pix
+
+img = cv2.imread('test_images/test4.jpg')
 warped = pt(img)
 leftx, lefty, rightx, righty = lane_finding(warped)
+left_fitx, right_fitx, yvals = get_polyfit(leftx, lefty, rightx, righty, order = 2)
+left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
+ve_position = vehicle_position(left_fitx)
