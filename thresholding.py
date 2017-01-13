@@ -17,6 +17,31 @@ plt.imshow(dst_image)
 '''
 #Use color transforms, gradients, etc., to create a thresholded binary image.
 
+def region_of_interest(img, vertices):
+    """
+    Applies an image mask.
+
+    Only keeps the region of the image defined by the polygon
+    formed from `vertices`. The rest of the image is set to black.
+    """
+    #defining a blank mask to start with
+    mask = np.zeros_like(img)
+
+    #defining a 3 channel or 1 channel color to fill the mask with depending on the input image
+    if len(img.shape) > 2:
+        channel_count = img.shape[2]  # i.e. 3 or 4 depending on your image
+        ignore_mask_color = (255,) * channel_count
+    else:
+        ignore_mask_color = 255
+
+    #filling pixels inside the polygon defined by "vertices" with the fill color
+    cv2.fillPoly(mask, vertices, ignore_mask_color)
+
+    #returning the image only where mask pixels are nonzero
+    masked_image = cv2.bitwise_and(img, mask)
+    return masked_image
+
+
 def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
 
     # Apply the following steps to img
@@ -97,6 +122,11 @@ def r_threshold(img, thresh = (170, 255)):
 
 def thresholding(img):
     dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
+    imshape = dst.shape
+    vertices = np.array([[(0, imshape[0]), (0.475*imshape[1], 400),
+                                  (0.525*imshape[1], 400),
+                                  (imshape[1], imshape[0])]], dtype=np.int32)
+    dst = region_of_interest(dst, vertices)
     s_binary = s_threshold(dst, thresh=(170, 255))
     grad_binary = abs_sobel_thresh(dst, orient='x', thresh_min=20, thresh_max=100)
     combined = np.zeros_like(s_binary)
