@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-from perspective_transform import pt
+from perspective_transform import pt, compute_M_Minv
 
 def lane_finding(warped):
     lefty, leftx, righty, rightx = [], [], [], []
@@ -104,9 +104,34 @@ def vehicle_position(left_fitx):
     xm_per_pix = 3.7 / 700  # meteres per pixel in x dimension
     return (1280//2 - left_fitx[-1]) * xm_per_pix
 
-img = cv2.imread('test_images/test4.jpg')
-warped = pt(img)
+
+
+
+def draw_back(warped, img, left_fitx, right_fitx, yvals, Minv):
+    # Create an image to draw the lines on
+    warp_zero = np.zeros_like(warped).astype(np.uint8)
+    color_warp = np.dstack((warp_zero, warp_zero, warp_zero))
+
+    # Recast the x and y points into usable format for cv2.fillPoly()
+    pts_left = np.array([np.transpose(np.vstack([left_fitx, yvals]))])
+    pts_right = np.array([np.flipud(np.transpose(np.vstack([right_fitx, yvals])))])
+    pts = np.hstack((pts_left, pts_right))
+
+    # Draw the lane onto the warped blank image
+    cv2.fillPoly(color_warp, np.int_([pts]), (0, 255, 0))
+
+    # Warp the blank back to original image space using inverse perspective matrix (Minv)
+    newwarp = cv2.warpPerspective(color_warp, Minv, (color_warp.shape[1], color_warp.shape[0]))
+    # Combine the result with the original image
+    result = cv2.addWeighted(img, 1, newwarp, 0.3, 0)
+    plt.imshow(result)
+
+
+img = cv2.imread('test_images/test1.jpg')
+M, Minv = compute_M_Minv()
+warped = pt(img, M)
 leftx, lefty, rightx, righty = lane_finding(warped)
 left_fitx, right_fitx, yvals = get_polyfit(leftx, lefty, rightx, righty, order = 2)
 left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
 ve_position = vehicle_position(left_fitx)
+draw_back(warped, img, left_fitx, right_fitx, yvals, Minv)
