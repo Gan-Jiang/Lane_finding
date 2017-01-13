@@ -2,18 +2,19 @@ import pickle
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.misc import imresize
 #Apply the distortion correction to the raw image.
 #read the camera calibration result
 with open('dist_pickle.p', mode='rb') as f:
     dist_pickle = pickle.load(f)
-
-img = cv2.imread('test_images/solidYellowLeft.jpg')
+'''
+img = cv2.imread('test_images/test_image.png')
+img = imresize(img, (720, 1280, 3))
 dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
-#dst_image = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
-#plt.imshow(dst_image)
 
-
-
+dst_image = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
+plt.imshow(dst_image)
+'''
 #Use color transforms, gradients, etc., to create a thresholded binary image.
 
 def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
@@ -95,7 +96,8 @@ def r_threshold(img, thresh = (170, 255)):
     return r_binary
 
 def thresholding(img):
-    s_binary = s_threshold(img, thresh=(170, 255))
+    dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
+    s_binary = s_threshold(dst, thresh=(170, 255))
     grad_binary = abs_sobel_thresh(dst, orient='x', thresh_min=20, thresh_max=100)
     combined = np.zeros_like(s_binary)
     combined[(s_binary == 1) | grad_binary == 1] = 1
