@@ -124,14 +124,13 @@ def draw_back(warped, img, left_fitx, right_fitx, yvals, Minv):
     newwarp = cv2.warpPerspective(color_warp, Minv, (color_warp.shape[1], color_warp.shape[0]))
     # Combine the result with the original image
     result = cv2.addWeighted(img, 1, newwarp, 0.3, 0)
-    plt.imshow(result)
+    return result
 
-
-img = cv2.imread('test_images/test1.jpg')
-M, Minv = compute_M_Minv()
-warped = pt(img, M)
-leftx, lefty, rightx, righty = lane_finding(warped)
-left_fitx, right_fitx, yvals = get_polyfit(leftx, lefty, rightx, righty, order = 2)
-left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
-ve_position = vehicle_position(left_fitx)
-draw_back(warped, img, left_fitx, right_fitx, yvals, Minv)
+def process_image(img):
+    M, Minv = compute_M_Minv()
+    warped = pt(img, M)
+    leftx, lefty, rightx, righty = lane_finding(warped)
+    left_fitx, right_fitx, yvals = get_polyfit(leftx, lefty, rightx, righty, order = 2)
+    left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
+    ve_position = vehicle_position(left_fitx)
+    return draw_back(warped, img, left_fitx, right_fitx, yvals, Minv)
