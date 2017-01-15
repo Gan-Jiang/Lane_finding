@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from thresholding import thresholding
+#from thresholding import thresholding
 import matplotlib.pyplot as plt
 
 def compute_M_Minv():
@@ -18,7 +18,7 @@ def compute_M_Minv():
 def pt(img, M):
     # e) use cv2.warpPerspective() to warp your image to a top-down view
 
-    dst_img = thresholding(img)
-    img_size = (dst_img.shape[1], dst_img.shape[0])
-    warped = cv2.warpPerspective(dst_img, M, img_size, flags = cv2.INTER_LINEAR)
+    #dst_img = thresholding(img)
+    img_size = (img.shape[1], img.shape[0])
+    warped = cv2.warpPerspective(img, M, img_size, flags = cv2.INTER_LINEAR)
     return warped

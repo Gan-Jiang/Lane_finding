@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-from perspective_transform import pt, compute_M_Minv
-
+from perspective_transform import compute_M_Minv
+from thresholding import thresholding
 def lane_finding(warped):
     lefty, leftx, righty, rightx = [], [], [], []
 
@@ -44,12 +44,18 @@ def lane_finding(warped):
                         righty.append(y)
 
         histogram_left = np.sum(warped[start:offset, peak_left - window_width_half:peak_left + window_width_half + 1], axis=0)
-        if histogram_left.max() > 5:
-            peak_left = np.argmax(histogram_left) + peak_left - window_width_half
+        try:
+            if histogram_left.max() > 5:
+                    peak_left = np.argmax(histogram_left) + peak_left - window_width_half
+        except:
+            pass
 
         histogram_right = np.sum(warped[start:offset, peak_right - window_width_half:peak_right + window_width_half + 1], axis=0)
-        if histogram_right.max() > 5:
-            peak_right = np.argmax(histogram_right) + peak_right - window_width_half
+        try:
+            if histogram_right.max() > 5:
+                peak_right = np.argmax(histogram_right) + peak_right - window_width_half
+        except:
+            pass
     return np.array(leftx),np.array(lefty),np.array(rightx),np.array(righty)
     '''
     result = np.zeros_like(warped)
@@ -98,7 +104,7 @@ def get_polyfit(leftx, lefty, rightx, righty, order = 2):
     plt.plot(right_fitx, yvals, color='green', linewidth=3)
     plt.gca().invert_yaxis()  # to visualize as we do the images
     '''
-    return left_fitx, right_fitx, yvals
+    return left_fitx, right_fitx, yvals, left_fit, right_fit
 
 def vehicle_position(left_fitx):
     xm_per_pix = 3.7 / 700  # meteres per pixel in x dimension
@@ -126,11 +132,9 @@ def draw_back(warped, img, left_fitx, right_fitx, yvals, Minv):
     result = cv2.addWeighted(img, 1, newwarp, 0.3, 0)
     return result
 
-def process_image(img):
-    M, Minv = compute_M_Minv()
-    warped = pt(img, M)
-    leftx, lefty, rightx, righty = lane_finding(warped)
-    left_fitx, right_fitx, yvals = get_polyfit(leftx, lefty, rightx, righty, order = 2)
-    left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
-    ve_position = vehicle_position(left_fitx)
-    return draw_back(warped, img, left_fitx, right_fitx, yvals, Minv)
+
+'''
+img = cv2.imread('test_images/test8.jpg')
+img2 = process_image(img)
+plt.imshow(img2)
+'''
