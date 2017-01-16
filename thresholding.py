@@ -97,6 +97,57 @@ def thresholding(img):
     combined = combined - combined2
     return combined
 
+def thresholding2(img, leftrange, rightrange):
+    dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
+    imshape = dst.shape
+    M, Minv = compute_M_Minv()
+    region = pt(dst, M)
+
+    color1 = color_mask(region[:, leftrange[0]-50:leftrange[1]+50, :])
+    color2 = color_mask(region[:, rightrange[0]-50:rightrange[1]+50, :])
+
+    grad_binary1 = abs_sobel_thresh(region[:, leftrange[0]-50:leftrange[1]+50, :], orient='x', thresh_min=10, thresh_max=50)
+    grad_binary2 = abs_sobel_thresh(region[:, rightrange[0]-50:rightrange[1]+50, :], orient='x', thresh_min=10, thresh_max=50)
+
+
+    # Define the Hough transform parameters
+    # Make a blank the same size as our image to draw on
+    rho = 1  # distance resolution in pixels of the Hough grid
+    theta = np.pi / 180  # angular resolution in radians of the Hough grid
+    threshold = 30  # minimum number of votes (intersections in Hough grid cell)
+    min_line_length = 30  # minimum number of pixels making up a line
+    max_line_gap = 0  # maximum gap in pixels between connectable line segments
+
+    line_image1 = np.copy(grad_binary1) * 0  # creating a blank to draw lines on
+    line_image2 = np.copy(grad_binary2) * 0  # creating a blank to draw lines on
+    # Run Hough on edge detected image
+    # Output "lines" is an array containing endpoints of detected line segments
+    lines1 = cv2.HoughLinesP(grad_binary1, rho, theta, threshold, np.array([]),
+                            min_line_length, max_line_gap)
+    lines2= cv2.HoughLinesP(grad_binary2, rho, theta, threshold, np.array([]),
+                            min_line_length, max_line_gap)
+    try:
+        for line in lines1:
+            for x1, y1, x2, y2 in line:
+                cv2.line(line_image1, (x1, y1), (x2, y2), 255, thickness=1)
+    except:
+        pass
+    try:
+        for line in lines2:
+            for x1, y1, x2, y2 in line:
+                cv2.line(line_image2, (x1, y1), (x2, y2), 255, thickness=1)
+    except:
+        pass
+
+    combined1 = np.zeros([720, 1280])
+    combined2 = np.zeros([720, 1280])
+    combined = np.zeros([720, 1280])
+    combined1[:, leftrange[0]-50:leftrange[1]+50] = color1
+    combined1[:, rightrange[0]-50:rightrange[1]+50] = color2
+    combined2[:, leftrange[0]-50:leftrange[1]+50] = line_image1
+    combined2[:, rightrange[0]-50:rightrange[1]+50] = line_image2
+    combined[(combined1 == 255) | (combined2 == 255)] = 1
+    return combined
 
 def color_mask(img):
     dst = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)

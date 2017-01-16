@@ -2,7 +2,7 @@ from moviepy.editor import VideoFileClip
 from IPython.display import HTML
 from lane_finding import get_curvature, vehicle_position, lane_finding, get_polyfit, draw_back
 from perspective_transform import compute_M_Minv
-from thresholding import thresholding
+from thresholding import thresholding, thresholding2
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,6 +11,15 @@ import cv2
 from collections import deque
 
 # Define a class to receive the characteristics of each line detection
+class Line():
+    def __init__(self):
+        #polynomial coefficients for the most recent fit
+        self.detected = False
+        self.recent_leftrange = [0, 0]
+        self.recent_rightrange = [0, 0]
+        self.left_fit = None
+        self.right_fit = None
+'''
 class Line():
     def __init__(self):
         #polynomial coefficients for the most recent fit
@@ -47,22 +56,46 @@ class Line():
         if abs(left_fit_A - mean_A) > 0.0015 or abs(left_fit_B - mean_B) > 0.3 or abs(left_fit_C - mean_C) > 50:
             return False
         return True
-
+'''
 
 line = Line()
 count1 = 0
 count2 = 0
 count = 0
+M, Minv = compute_M_Minv()
+
+
 def process_image(img):
 
-    global line, count1, count2, count
+    global line, count1, count2, count, M, Minv
   #  if count < 1105:
   #      count += 1
   #      return img
     count += 1
-    M, Minv = compute_M_Minv()
-    warped = thresholding(img)
-    leftx, lefty, rightx, righty = lane_finding(warped)
+    if line.detected == True:
+        #there is line detected in the last frame
+        warped = thresholding2(img, line.recent_leftrange, line.recent_rightrange)
+        leftx, lefty, rightx, righty = lane_finding(warped)
+        yvals = np.linspace(0, 100, num=101) * 7.2
+        left_fitx, left_fit = get_polyfit(leftx, lefty, yvals, line.left_fit)
+        right_fitx, right_fit = get_polyfit(rightx, righty, yvals, line.right_fit)
+        if 0.85 < (left_fitx[-1] - right_fitx[-1])/((left_fitx[1] - right_fitx[1])) < 1.15:
+            pass
+        else:
+            warped = thresholding(img)
+            leftx, lefty, rightx, righty = lane_finding(warped)
+            yvals = np.linspace(0, 100, num=101) * 7.2
+            left_fitx, left_fit = get_polyfit(leftx, lefty, yvals, line.left_fit)
+            right_fitx, right_fit = get_polyfit(rightx, righty, yvals, line.right_fit)
+
+    else:
+        warped = thresholding(img)
+        leftx, lefty, rightx, righty = lane_finding(warped)
+        yvals = np.linspace(0, 100, num=101) * 7.2
+        left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
+        right_fitx, right_fit = get_polyfit(rightx, righty, yvals)
+        line.detected = True
+
     '''
     result = np.zeros_like(warped)
     result[lefty,leftx] = 1
@@ -77,32 +110,13 @@ def process_image(img):
     ax2.set_title('result', fontsize=40)
 
     '''
-    yvals = np.linspace(0, 100, num=101) * 7.2
-    left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
-    right_fitx, right_fit = get_polyfit(rightx, righty, yvals)
 
-    '''
-    try:
-        yvals = np.linspace(0, 100, num=101) * 7.2
-        left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
-        right_fitx, right_fit = get_polyfit(rightx, righty,yvals)
 
-        if line.init:
-            if len(left_fit) != 2 or len(right_fit) != 2:
-                if line.judge(left_fitx, right_fitx, yvals, left_fit, right_fit):
-                    line.update_recent(left_fitx, right_fitx, yvals, left_fit, right_fit)
-                else:
-                    count1 += 1
-                    #too large difference
-                    left_fitx, right_fitx, yvals = line.last_fit
-        else:
-            line.update_recent(left_fitx, right_fitx, yvals, left_fit, right_fit)
+    line.recent_leftrange = [left_fitx.min(), left_fitx.max()]
+    line.recent_rightrange = [right_fitx.min(), right_fitx.max()]
+    line.left_fit = left_fit
+    line.right_fit = right_fit
 
-    except:
-        if line.init:
-            count2 += 1
-            left_fitx, right_fitx, yvals = line.last_fit
-    '''
     left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
     ve_position = vehicle_position(left_fitx, right_fitx)
     ve_position = 'Lane deviation: ' + str(ve_position) + ' m.'
@@ -116,7 +130,7 @@ def process_image(img):
    #     aaa=1
     return result
 '''
-img = cv2.imread('test_images/test30.jpg')
+img = cv2.imread('test_images/test4.jpg')
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 img2 = process_image(img)
 plt.imshow(img2)
@@ -126,7 +140,7 @@ img2 = Image.fromarray(img, 'RGB')
 img2.save('test2.jpg')
 '''
 
-white_output = 'test13.mp4'
+white_output = 'test15.mp4'
 clip1 = VideoFileClip("project_video.mp4")
 white_clip = clip1.fl_image(process_image) #NOTE: this function expects color images!!
 white_clip.write_videofile(white_output, audio=False)

@@ -14,6 +14,10 @@ def lane_finding(warped):
 
     peak_left = np.argmax(histogram[:warped.shape[1]//2])
     peak_right = np.argmax(histogram[warped.shape[1]//2:]) + warped.shape[1]//2
+    for i in range(100):
+        righty.append(720)
+        rightx.append(peak_right)
+
     leftx.append(peak_left)
     rightx.append(peak_right)
     lefty.append(720)
@@ -90,16 +94,17 @@ def get_curvature(left_fitx, right_fitx, yvals):
                     / np.absolute(2 * left_fit_cr[0])
     right_curverad = ((1 + (2 * right_fit_cr[0] * y_eval + right_fit_cr[1]) ** 2) ** 1.5) \
                      / np.absolute(2 * right_fit_cr[0])
+    if right_curverad > 10000:
+        #first order fitting.
+        right_curverad = left_curverad
     # Now our radius of curvature is in meters
     return left_curverad, right_curverad
 
-def get_polyfit(leftx, lefty, yvals):
-    if len(lefty) <= 5000:
-        left_fit = np.polyfit(lefty, leftx, 1)
-        left_fitx = left_fit[0] * yvals + left_fit[1]
-    else:
-        left_fit = np.polyfit(lefty, leftx, 2)
-        left_fitx = left_fit[0] * yvals ** 2 + left_fit[1] * yvals + left_fit[2]
+def get_polyfit(leftx, lefty, yvals, lleftfit = None):
+    left_fit = np.polyfit(lefty, leftx, 2)
+    if lleftfit != None:
+        left_fit = (left_fit + lleftfit)/2
+    left_fitx = left_fit[0] * yvals ** 2 + left_fit[1] * yvals + left_fit[2]
     '''
     plt.plot(leftx, lefty, 'o', color='red')
     plt.plot(rightx, righty, 'o', color='blue')
