@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.misc import imresize
 from perspective_transform import pt,compute_M_Minv
-from lane_finding import lane_finding, get_polyfit
+#from lane_finding import lane_finding, get_polyfit
 #Apply the distortion correction to the raw image.
 #read the camera calibration result
 with open('dist_pickle.p', mode='rb') as f:
@@ -39,7 +39,7 @@ def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
 
     # Apply the following steps to img
     # 1) Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     # 2) Take the derivative in x or y given orient = 'x' or 'y'
     sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0)
     # 3) Take the absolute value of the derivative or gradient
@@ -56,9 +56,9 @@ def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
 def thresholding(img):
     dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
     imshape = dst.shape
-    vertices = np.array([[(100, imshape[0]), (0.475 * imshape[1], 400),
-                          (0.525 * imshape[1], 400),
-                          (imshape[1] - 100, imshape[0])]], dtype=np.int32)
+    vertices = np.array([[(50, imshape[0]), (0.472 * imshape[1], 400),
+                          (0.528 * imshape[1], 400),
+                          (imshape[1] - 50, imshape[0])]], dtype=np.int32)
     region = region_of_interest(dst, vertices)
     M, Minv = compute_M_Minv()
     region = pt(region, M)
@@ -66,12 +66,30 @@ def thresholding(img):
 
     grad_binary = abs_sobel_thresh(region, orient='x', thresh_min=10, thresh_max=50)
 
+    # Define the Hough transform parameters
+    # Make a blank the same size as our image to draw on
+    rho = 1  # distance resolution in pixels of the Hough grid
+    theta = np.pi / 180  # angular resolution in radians of the Hough grid
+    threshold = 30  # minimum number of votes (intersections in Hough grid cell)
+    min_line_length = 30  # minimum number of pixels making up a line
+    max_line_gap = 0  # maximum gap in pixels between connectable line segments
+
+    line_image = np.copy(color) * 0  # creating a blank to draw lines on
+
+    # Run Hough on edge detected image
+    # Output "lines" is an array containing endpoints of detected line segments
+    lines = cv2.HoughLinesP(grad_binary, rho, theta, threshold, np.array([]),
+                            min_line_length, max_line_gap)
+    for line in lines:
+        for x1, y1, x2, y2 in line:
+            cv2.line(line_image, (x1, y1), (x2, y2), 255, thickness=1)
+
     combined = np.zeros_like(color)
-    combined[(color == 255) | grad_binary == 1] = 1
-    vertices2 = np.array([[(0.23*imshape[1], imshape[0]), (0.08 * imshape[1], 0),
-                           (0.82 * imshape[1], 0),
-                           (0.7035*imshape[1], imshape[0])]], dtype=np.int32)
-    combined = region_of_interest(combined, vertices2)
+    combined[(color == 255) | (line_image == 255)] = 1
+    vertices2 = np.array([[(0.21*imshape[1], imshape[0]), (0.08 * imshape[1], 0),
+                           (0.87 * imshape[1], 0),
+                           (0.75*imshape[1], imshape[0])]], dtype=np.int32)
+    #combined = region_of_interest(combined, vertices2)
     vertices2 = np.array([[(350, imshape[0]), (599, 0),
                            (600, 0),
                            (850, imshape[0])]], dtype=np.int32)
@@ -81,7 +99,7 @@ def thresholding(img):
 
 
 def color_mask(img):
-    dst = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    dst = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
     yellow_hsv_low = np.array([0, 80, 0])
     yellow_hsv_high = np.array([80, 255, 255])
@@ -92,8 +110,9 @@ def color_mask(img):
 
     mask_white = cv2.inRange(dst, white_hsv_low, white_hsv_high)
     return mask_yellow+mask_white
-
-img = cv2.imread('test_images/test15.jpg')
+'''
+img = cv2.imread('test_images/test35.png')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 img = imresize(img, (720, 1280, 3))
 M, Minv = compute_M_Minv()
 warped = thresholding(img)
@@ -102,7 +121,10 @@ img_size = (img.shape[1], img.shape[0])
 img2 = cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
 
 leftx, lefty, rightx, righty = lane_finding(warped)
-left_fitx, right_fitx, yvals, left_fit, right_fit = get_polyfit(leftx, lefty, rightx, righty, order=2)
+yvals = np.linspace(0, 100, num=101) * 7.2
+
+left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
+right_fitx, right_fit = get_polyfit(rightx, righty,yvals)
 
 warp_zero = np.zeros_like(warped).astype(np.uint8)
 color_warp = np.dstack((warp_zero, warp_zero, warp_zero))
@@ -119,7 +141,6 @@ result = cv2.addWeighted(img2, 1, color_warp, 0.3, 0)
 f, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(24, 9))
 f.tight_layout()
 
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 ax1.imshow(img)
 ax1.set_title('Original Image', fontsize=40)
 
@@ -128,3 +149,6 @@ ax2.set_title('combined', fontsize=40)
 
 ax3.imshow(result)
 ax3.set_title('poly', fontsize=40)
+
+histogram = np.sum(warped[warped.shape[0] // 2:, :], axis=0)
+'''

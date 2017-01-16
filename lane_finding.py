@@ -2,18 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 from perspective_transform import compute_M_Minv
-from thresholding import thresholding
+#from thresholding import thresholding
+from scipy.misc import imresize
 def lane_finding(warped):
     lefty, leftx, righty, rightx = [], [], [], []
 
     window_height = 100
-    window_width_half = 45
+    window_width_half = 60
     histogram = np.sum(warped[warped.shape[0]//2:,:], axis=0)
     #plt.plot(histogram)
 
     peak_left = np.argmax(histogram[:warped.shape[1]//2])
     peak_right = np.argmax(histogram[warped.shape[1]//2:]) + warped.shape[1]//2
-
+    leftx.append(peak_left)
+    rightx.append(peak_right)
+    lefty.append(720)
+    righty.append(720)
     for offset in range(warped.shape[0],-1, -window_height):
         if offset - window_height < 0:
             start = 0
@@ -44,13 +48,14 @@ def lane_finding(warped):
                         righty.append(y)
 
         histogram_left = np.sum(warped[start:offset, peak_left - window_width_half:peak_left + window_width_half + 1], axis=0)
+        histogram_right = np.sum(warped[start:offset, peak_right - window_width_half:peak_right + window_width_half + 1], axis=0)
+
         try:
             if histogram_left.max() > 5:
-                    peak_left = np.argmax(histogram_left) + peak_left - window_width_half
+                peak_left = np.argmax(histogram_left) + peak_left - window_width_half
         except:
             pass
 
-        histogram_right = np.sum(warped[start:offset, peak_right - window_width_half:peak_right + window_width_half + 1], axis=0)
         try:
             if histogram_right.max() > 5:
                 peak_right = np.argmax(histogram_right) + peak_right - window_width_half
@@ -88,13 +93,13 @@ def get_curvature(left_fitx, right_fitx, yvals):
     # Now our radius of curvature is in meters
     return left_curverad, right_curverad
 
-def get_polyfit(leftx, lefty, rightx, righty, order = 2):
-    left_fit = np.polyfit(lefty, leftx, order)
-    yvals = np.linspace(0, 100, num=101) * 7.2
-    left_fitx = left_fit[0] * yvals ** 2 + left_fit[1] * yvals + left_fit[2]
-
-    right_fit = np.polyfit(righty, rightx, order)
-    right_fitx = right_fit[0] * yvals ** 2 + right_fit[1] * yvals + right_fit[2]
+def get_polyfit(leftx, lefty, yvals):
+    if len(lefty) <= 5000:
+        left_fit = np.polyfit(lefty, leftx, 1)
+        left_fitx = left_fit[0] * yvals + left_fit[1]
+    else:
+        left_fit = np.polyfit(lefty, leftx, 2)
+        left_fitx = left_fit[0] * yvals ** 2 + left_fit[1] * yvals + left_fit[2]
     '''
     plt.plot(leftx, lefty, 'o', color='red')
     plt.plot(rightx, righty, 'o', color='blue')
@@ -104,11 +109,12 @@ def get_polyfit(leftx, lefty, rightx, righty, order = 2):
     plt.plot(right_fitx, yvals, color='green', linewidth=3)
     plt.gca().invert_yaxis()  # to visualize as we do the images
     '''
-    return left_fitx, right_fitx, yvals, left_fit, right_fit
+    return left_fitx, left_fit
 
-def vehicle_position(left_fitx):
+def vehicle_position(left_fitx, right_fitx):
     xm_per_pix = 3.7 / 700  # meteres per pixel in x dimension
-    return (1280//2 - left_fitx[-1]) * xm_per_pix
+    val_center = (left_fitx[-1] + right_fitx[-1])/2
+    return (1280/2 - val_center) * xm_per_pix
 
 
 
@@ -137,4 +143,34 @@ def draw_back(warped, img, left_fitx, right_fitx, yvals, Minv):
 img = cv2.imread('test_images/test8.jpg')
 img2 = process_image(img)
 plt.imshow(img2)
+
 '''
+'''
+img = cv2.imread('test_images/test31.png')
+#img = imresize(img, (720, 1280, 3))
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+M, Minv = compute_M_Minv()
+warped = thresholding(img)
+#img_size = (img.shape[1], img.shape[0])
+
+#img2 = cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
+
+leftx, lefty, rightx, righty = lane_finding(warped)
+
+yvals = np.linspace(0, 100, num=101) * 7.2
+
+left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
+right_fitx, right_fit = get_polyfit(rightx, righty,yvals)
+plt.imshow(draw_back(warped, img, left_fitx, right_fitx, yvals, Minv))
+'''
+'''
+plt.plot(leftx, lefty, 'o', color='red')
+plt.plot(rightx, righty, 'o', color='blue')
+plt.xlim(0, 1280)
+plt.ylim(0, 720)
+plt.plot(left_fitx, yvals, color='green', linewidth=3)
+plt.plot(right_fitx, yvals, color='green', linewidth=3)
+plt.gca().invert_yaxis()  # to visualize as we do the images
+'''
+

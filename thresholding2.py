@@ -156,7 +156,7 @@ def color_mask(img):
     return mask_yellow+mask_white
 
 
-img = cv2.imread('test_images/test12.jpg')
+img = cv2.imread('test_images/test21.jpg')
 img = imresize(img, (720, 1280, 3))
 dst = cv2.undistort(img, dist_pickle["mtx"], dist_pickle["dist"], None, dist_pickle["mtx"])
 

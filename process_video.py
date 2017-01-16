@@ -15,8 +15,8 @@ class Line():
     def __init__(self):
         #polynomial coefficients for the most recent fit
         self.init = False
-        self.recent_leftfit = deque(maxlen = 3)
-        self.recent_rightfit = deque(maxlen = 3)
+        self.recent_leftfit = deque(maxlen = 4)
+        self.recent_rightfit = deque(maxlen = 4)
         self.last_fit = None
 
     def update_recent(self,left_fitx, right_fitx, yvals, left_fit, right_fit):
@@ -26,21 +26,25 @@ class Line():
         self.recent_rightfit.append(right_fit)
 
     def judge(self, left_fitx, right_fitx, yvals, left_fit, right_fit):
-        if self.judge_A_left(left_fit[0],left_fit[1], self.recent_leftfit) and self.judge_A_left(right_fit[0], right_fit[1], self.recent_rightfit):
+        if self.judge_A_left(left_fit[0],left_fit[1],left_fit[2],self.recent_leftfit) and self.judge_A_left(right_fit[0], right_fit[1], right_fit[2], self.recent_rightfit):
             return True
         return False
 
-    def judge_A_left(self, left_fit_A, left_fit_B, recent_leftfit):
+    def judge_A_left(self, left_fit_A, left_fit_B, left_fit_C, recent_leftfit):
         mean_A = 0
         mean_B = 0
+        mean_C = 0
+
         for i in recent_leftfit:
             mean_A += i[0]
             mean_B += i[1]
+            mean_C += i[2]
+        length = len(recent_leftfit)
+        mean_A /= length
+        mean_B /= length
+        mean_C /= length
 
-        mean_A /= recent_leftfit.maxlen
-        mean_B /= recent_leftfit.maxlen
-
-        if abs(left_fit_A - mean_A) > 0.0015 or abs(left_fit_B - mean_B) > 0.3:
+        if abs(left_fit_A - mean_A) > 0.0015 or abs(left_fit_B - mean_B) > 0.3 or abs(left_fit_C - mean_C) > 50:
             return False
         return True
 
@@ -50,7 +54,11 @@ count1 = 0
 count2 = 0
 count = 0
 def process_image(img):
+
     global line, count1, count2, count
+  #  if count < 1105:
+  #      count += 1
+  #      return img
     count += 1
     M, Minv = compute_M_Minv()
     warped = thresholding(img)
@@ -69,43 +77,61 @@ def process_image(img):
     ax2.set_title('result', fontsize=40)
 
     '''
+    yvals = np.linspace(0, 100, num=101) * 7.2
+    left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
+    right_fitx, right_fit = get_polyfit(rightx, righty, yvals)
 
+    '''
     try:
-        left_fitx, right_fitx, yvals, left_fit, right_fit = get_polyfit(leftx, lefty, rightx, righty, order = 2)
+        yvals = np.linspace(0, 100, num=101) * 7.2
+        left_fitx, left_fit = get_polyfit(leftx, lefty, yvals)
+        right_fitx, right_fit = get_polyfit(rightx, righty,yvals)
+
         if line.init:
-            if line.judge(left_fitx, right_fitx, yvals, left_fit, right_fit):
-                line.update_recent(left_fitx, right_fitx, yvals, left_fit, right_fit)
-            else:
-                count1 += 1
-                #too large difference
-                left_fitx, right_fitx, yvals = line.last_fit
+            if len(left_fit) != 2 or len(right_fit) != 2:
+                if line.judge(left_fitx, right_fitx, yvals, left_fit, right_fit):
+                    line.update_recent(left_fitx, right_fitx, yvals, left_fit, right_fit)
+                else:
+                    count1 += 1
+                    #too large difference
+                    left_fitx, right_fitx, yvals = line.last_fit
         else:
             line.update_recent(left_fitx, right_fitx, yvals, left_fit, right_fit)
+
     except:
         if line.init:
             count2 += 1
             left_fitx, right_fitx, yvals = line.last_fit
+    '''
+    left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
+    ve_position = vehicle_position(left_fitx, right_fitx)
+    ve_position = 'Lane deviation: ' + str(ve_position) + ' m.'
 
-    #left_curverad, right_curverad = get_curvature(left_fitx, right_fitx, yvals)
-    #ve_position = vehicle_position(left_fitx)
-    #if count >525:
-    #    aaa=1
-    return draw_back(warped, img, left_fitx, right_fitx, yvals, Minv)
-
-img = cv2.imread('test_images/test15.jpg')
+    str_curv = 'Curvature: Right = ' + str(left_curverad) + ', Left = ' + str(right_curverad)
+    font = cv2.FONT_HERSHEY_COMPLEX
+    result = draw_back(warped, img, left_fitx, right_fitx, yvals, Minv)
+    cv2.putText(result, str_curv, (30, 60), font, 1, (0, 255, 0), 2)
+    cv2.putText(result, ve_position, (30, 90), font, 1, (0, 255, 0), 2)
+    #  if count >1105:
+   #     aaa=1
+    return result
+'''
+img = cv2.imread('test_images/test30.jpg')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 img2 = process_image(img)
 plt.imshow(img2)
-
+'''
 '''from PIL import Image
 img2 = Image.fromarray(img, 'RGB')
 img2.save('test2.jpg')
 '''
-'''
-white_output = 'test8.mp4'
+
+white_output = 'test13.mp4'
 clip1 = VideoFileClip("project_video.mp4")
 white_clip = clip1.fl_image(process_image) #NOTE: this function expects color images!!
 white_clip.write_videofile(white_output, audio=False)
-'''
+
+
 '''
 white_output = 'test4.mp4'
 clip1 = VideoFileClip("challenge_video.mp4")
