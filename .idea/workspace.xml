@@ -2,8 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c90fef35-63fb-456a-83f3-70f82311c8f5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/camera_calibration.pkl" afterPath="$PROJECT_DIR$/camera_calibration.pkl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/report.ipynb" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/camera_calibration.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/main_lane_markings_22.ipynb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test10.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test11.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test12.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test13.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test14.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test15.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test16.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test7.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test8.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test9.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_images/test_image.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test_undist.jpg" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calibration.py" afterPath="$PROJECT_DIR$/calibration.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lane_finding.py" afterPath="$PROJECT_DIR$/lane_finding.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/perspective_transform.py" afterPath="$PROJECT_DIR$/perspective_transform.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/process_video.py" afterPath="$PROJECT_DIR$/process_video.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/thresholding.py" afterPath="$PROJECT_DIR$/thresholding.py" />
     </list>
@@ -37,22 +56,10 @@
       <file leaf-file-name="calibration.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calibration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+            <state relative-caret-position="495">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="thresholding2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/thresholding2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1695">
-              <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -61,8 +68,8 @@
       <file leaf-file-name="thresholding.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/thresholding.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="174" column="26" selection-start-line="174" selection-start-column="23" selection-end-line="174" selection-end-column="26" />
+            <state relative-caret-position="385">
+              <caret line="209" column="53" selection-start-line="194" selection-start-column="0" selection-end-line="209" selection-end-column="53" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -70,11 +77,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="74" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="74" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="perspective_transform.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/perspective_transform.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="67" selection-start-line="7" selection-start-column="67" selection-end-line="7" selection-end-column="67" />
+            <state relative-caret-position="165">
+              <caret line="11" column="35" selection-start-line="0" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -85,8 +102,8 @@
       <file leaf-file-name="lane_finding.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lane_finding.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="102" column="12" selection-start-line="102" selection-start-column="12" selection-end-line="102" selection-end-column="12" />
+            <state relative-caret-position="150">
+              <caret line="10" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="110" selection-end-column="17" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -97,33 +114,11 @@
       <file leaf-file-name="process_video.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/process_video.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="158" column="0" selection-start-line="136" selection-start-column="3" selection-end-line="158" selection-end-column="0" />
+            <state relative-caret-position="87">
+              <caret line="59" column="62" selection-start-line="0" selection-start-column="0" selection-end-line="78" selection-end-column="53" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
-                <marker date="1484549965000" expanded="true" signature="4604:4719" placeholder="'''...'''" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="P1.ipynb" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../P1(self-driving)/CarND-LaneLines-P1/P1.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="8" />
             </state>
           </provider>
         </entry>
@@ -134,6 +129,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -143,15 +139,18 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/calibration.py" />
         <option value="$PROJECT_DIR$/process_image.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/thresholding2.py" />
         <option value="$PROJECT_DIR$/cali2.py" />
+        <option value="$PROJECT_DIR$/beifen/process_video.py" />
         <option value="$PROJECT_DIR$/perspective_transform.py" />
+        <option value="$PROJECT_DIR$/calibration.py" />
         <option value="$PROJECT_DIR$/thresholding.py" />
         <option value="$PROJECT_DIR$/lane_finding.py" />
         <option value="$PROJECT_DIR$/process_video.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/report.ipynb" />
       </list>
     </option>
   </component>
@@ -162,7 +161,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+    <option name="x" value="1673" />
+    <option name="y" value="57" />
     <option name="width" value="1440" />
     <option name="height" value="805" />
   </component>
@@ -206,6 +206,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Lane_finding" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lane_finding" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lane_finding" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="output_images" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -562,7 +576,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="805" extended-state="6" />
+    <frame x="1673" y="57" width="1440" height="805" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26824033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -570,11 +584,11 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43356642" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27769986" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819074" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32587412" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32027972" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -625,7 +639,7 @@
         <state relative-caret-position="4230">
           <caret line="286" column="43" selection-start-line="286" selection-start-column="33" selection-end-line="286" selection-end-column="43" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -666,7 +680,6 @@
           <caret line="55" column="10" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="10" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
-            <marker date="1484549965000" expanded="true" signature="4604:4719" placeholder="'''...'''" />
           </folding>
         </state>
       </provider>
@@ -675,9 +688,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -734,7 +745,6 @@
           <caret line="8" column="54" selection-start-line="8" selection-start-column="54" selection-end-line="8" selection-end-column="54" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
-            <marker date="1484549965000" expanded="true" signature="4604:4719" placeholder="'''...'''" />
           </folding>
         </state>
       </provider>
@@ -743,9 +753,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -800,9 +808,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -821,40 +827,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calibration.py">
+    <entry file="file://$PROJECT_DIR$/thresholding2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+        <state relative-caret-position="1695">
+          <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#13#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beifen/process_video.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="76" column="27" selection-start-line="76" selection-start-column="27" selection-end-line="76" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/anaconda/lib/python3.5/site-packages/numpy/lib/polynomial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="401" column="10" selection-start-line="401" selection-start-column="10" selection-end-line="401" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/report.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="-1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/perspective_transform.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="35" selection-start-line="0" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/thresholding2.py">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1695">
-          <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="60">
+          <caret line="4" column="74" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="74" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/thresholding.py">
+    <entry file="file://$PROJECT_DIR$/calibration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="174" column="26" selection-start-line="174" selection-start-column="23" selection-end-line="174" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/perspective_transform.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="67" selection-start-line="7" selection-start-column="67" selection-end-line="7" selection-end-column="67" />
+        <state relative-caret-position="495">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -863,21 +890,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lane_finding.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="102" column="12" selection-start-line="102" selection-start-column="12" selection-end-line="102" selection-end-column="12" />
+        <state relative-caret-position="150">
+          <caret line="10" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="110" selection-end-column="17" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/thresholding.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="209" column="53" selection-start-line="194" selection-start-column="0" selection-end-line="209" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/process_video.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="158" column="0" selection-start-line="136" selection-start-column="3" selection-end-line="158" selection-end-column="0" />
+        <state relative-caret-position="87">
+          <caret line="59" column="62" selection-start-line="0" selection-start-column="0" selection-end-line="78" selection-end-column="53" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
-            <marker date="1484549965000" expanded="true" signature="4604:4719" placeholder="'''...'''" />
           </folding>
         </state>
       </provider>

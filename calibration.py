@@ -1,9 +1,7 @@
 import numpy as np
 import cv2
 import glob
-import matplotlib.pyplot as plt
 import pickle
-
 
 #Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
@@ -37,7 +35,6 @@ img_size = (img.shape[1], img.shape[0])
 # Do camera calibration given object points and image points
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img_size,None,None)
 
-
 dst = cv2.undistort(img, mtx, dist, None, mtx)
 cv2.imwrite('test_undist.jpg',dst)
 
@@ -45,4 +42,4 @@ cv2.imwrite('test_undist.jpg',dst)
 dist_pickle = {}
 dist_pickle["mtx"] = mtx
 dist_pickle["dist"] = dist
-pickle.dump( dist_pickle, open("dist_pickle.p", "wb" ) )
+pickle.dump( dist_pickle, open("dist_pickle.p", "wb"))
