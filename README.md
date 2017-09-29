@@ -2,41 +2,21 @@
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
 
-In this project, your goal is to write a software pipeline to identify the lane boundaries in a video, but the main output or product we want you to create is a detailed writeup of the project.  Check out the [writeup template](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup.  
+In this project, I write a software pipeline to identify the lane boundaries in a video, which is a following project after P1. The images for camera calibration are stored in the folder called `camera_cal`.  The images in `test_images` are for testing your pipeline on single frames. 
 
-The Project
----
-
-The goals / steps of this project are the following:
-
-* Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
-* Apply a distortion correction to raw images.
-* Use color transforms, gradients, etc., to create a thresholded binary image.
-* Apply a perspective transform to rectify binary image ("birds-eye view").
-* Detect lane pixels and fit to find the lane boundary.
-* Determine the curvature of the lane and vehicle position with respect to center.
-* Warp the detected lane boundaries back onto the original image.
-* Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
-
-The images for camera calibration are stored in the folder called `camera_cal`.  The images in `test_images` are for testing your pipeline on single frames.  If you want to extract more test images from the videos, you can simply use an image writing method like `cv2.imwrite()`, i.e., you can read the video in frame by frame as usual, and for frames you want to save for later you can write to an image file.  
-
-To help the reviewer examine your work, please save examples of the output from each stage of your pipeline in the folder called `ouput_images`, and include a description in your writeup for the project of what each image shows.    The video called `project_video.mp4` is the video your pipeline should work well on.  
-
-The `challenge_video.mp4` video is an extra (and optional) challenge for you if you want to test your pipeline under somewhat trickier conditions.  The `harder_challenge.mp4` video is another optional challenge and is brutal!
-
-If you're feeling ambitious (again, totally optional though), don't stop there!  We encourage you to go out and take video of your own, calibrate your camera and show us how you would implement this project from scratch!
-
-
-# What I did: 
-Find and draw the lanes on the roads.
-
+### What I did
 There are the following .py files:
+
 (1) calibration.py: Compute the camera matrix and distortion coefficients.
+
 (2) thresholding.py: Apply the following: (a). region selection (b). color selection (c). X-sobel threshold.
     threshoulding2() is used to find the lane lines according to the line centers found in the last frame.
+    
 (3) perspective_transform.py: Apply perspective_transform.
+
 (4) lane_finding.py: Apply histogram method and sliding window to find the lane line pixels. The curvature and vehicle
     position are also found in this file.
+    
 (5) process_video.py: The pipeline to apply all the above functions to a video.
 
 First, run calibration.py to compute the camera matrix and distortion coefficients which are stored in dist_pickle.p.
@@ -68,4 +48,3 @@ processing video, I use Line() class to store the line fit of the recent frame. 
  the bottom pixel in the left lane line and right lane line. If their ratio is in a specific range. I consider it a
  valid lane line. If not, I will use thresholding() to refind the lane line center. Also, a moving average is also used
  to make the lane lines more smooth.
-
